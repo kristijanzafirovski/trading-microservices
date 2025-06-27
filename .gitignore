@@ -1,0 +1,14 @@
+# Project exclude paths
+/data-analysis-service/.gradle/
+/data-analysis-service/build/
+/data-analysis-service/build/classes/java/main/
+/data-ingestion-service/.gradle/
+/data-ingestion-service/build/
+/data-ingestion-service/build/classes/java/main/
+/data-storage-service/.gradle/
+/data-storage-service/build/
+/data-storage-service/build/classes/java/main/
+/data-visualization-service/.gradle/
+/real-time-processing-service/.gradle/
+/real-time-processing-service/build/
+/real-time-processing-service/build/classes/java/main/

@@ -1,9 +1,9 @@
-FROM gradle:7.6.0-jdk17 AS build
+FROM gradle:7.6.0-jdk11 AS build
 WORKDIR /app
 COPY . .
 RUN gradle shadowJar --no-daemon
 
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:11-jdk
 WORKDIR /app
 COPY --from=build /app/build/libs/*-all.jar app.jar
 EXPOSE 8083
