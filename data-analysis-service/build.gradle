@@ -1,0 +1,62 @@
+plugins {
+    id("java")
+    id("io.micronaut.application") version "4.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+}
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    version "4.1.0"
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.example.analysis.*")
+    }
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    runtimeOnly("org.yaml:snakeyaml:2.2")
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+    implementation("org.json:json:20230227")
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+    runtimeOnly("org.slf4j:slf4j-simple:2.0.7")
+    implementation("io.micronaut:micronaut-jackson-databind")
+
+}
+
+application {
+    mainClass.set("com.example.analysis.AnalysisApp")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.example.analysis.AnalysisApp'  // <-- REPLACE with your main class
+        )
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('data-analysis-service')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+    manifest {
+        attributes 'Main-Class': 'com.example.analysis.AnalysisApp'
+    }
+}
+
+
+tasks.build {
+    dependsOn shadowJar
+}

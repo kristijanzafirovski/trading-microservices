@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trading Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f8f9fa;
+        }
+        #charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1 1 45%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4 text-center">📈 Trading Dashboard</h1>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="tickerInput" placeholder="Search by Ticker...">
+        </div>
+        <button class="btn btn-primary mb-4" onclick="fetchData()">Search</button>
+        <div id="charts"></div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            const ticker = document.getElementById('tickerInput').value;
+            const res = await fetch(`http://localhost:8082/signals/`);
+            const data = await res.json();
+            const filtered = data.filter(item => !ticker || item.ticker.toLowerCase().includes(ticker.toLowerCase()));
+            renderCharts(filtered);
+        }
+
+        function renderCharts(data) {
+            const container = document.getElementById('charts');
+            container.innerHTML = '';
+            data.forEach(signal => {
+                const chartId = `chart-${signal.ticker}`;
+                const html = `
+                    <div class="chart-container">
+                        <h5>${signal.ticker}</h5>
+                        <canvas id="${chartId}"></canvas>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+
+                new Chart(document.getElementById(chartId), {
+                    type: 'line',
+                    data: {
+                        labels: ['Open', 'Close'],
+                        datasets: [{
+                            label: 'Price',
+                            data: [signal.open, signal.close],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2
+                        }]
+                    }
+                });
+            });
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>

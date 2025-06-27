@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.spark:spark-core_2.12:3.1.2'
+    implementation 'org.apache.spark:spark-sql_2.12:3.1.2'
+}
+
+application {
+    mainClass = 'com.example.processing.RealTimeProcessingApp'
+}
